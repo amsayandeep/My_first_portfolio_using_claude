@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="hi-IN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sayandeep's Portfolio - Projects and Professional Work">
+  <title>Sayandeep's Portfolio</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #333;
+      --card-bg: #ffffff;
+      --nav-bg: rgba(255, 255, 255, 0.9);
+    }
+
+    .dark-mode {
+      --bg-color: #121212;
+      --text-color: #ffffff;
+      --card-bg: #1e1e1e;
+      --nav-bg: rgba(30, 30, 30, 0.9);
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
+      overflow-x: hidden;
+      color: var(--text-color);
+      background: var(--bg-color);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-direction: column;
+      padding: 2rem;
+      background: var(--bg-color);
+    }
+
+    .text-container {
+      position: fixed;
+      top: 20%;
+      left: 80%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      font-weight: bold;
+      opacity: 0;
+      transition: all 0.1s ease;
+      z-index: 20;
+      color: var(--text-color);
+    }
+
+    .name-text {
+      position: fixed;
+      top: 20%;
+      left: 70%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--text-color);
+      opacity: 0;
+      transition: all 0.1s ease;
+      z-index: 10;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      width: 100%;
+      margin-top: 120px;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .project-image {
+      width: 100%;
+      height: 250px;
+      background-size: cover;
+      background-position: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .project-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-title {
+      font-size: 1.5rem;
+      margin: 0 0 1rem 0;
+      color: var(--text-color);
+      line-height: 1.3;
+    }
+
+    .project-description {
+      font-size: 1rem;
+      color: var(--text-color);
+      margin: 0 0 1.5rem 0;
+      line-height: 1.6;
+      flex-grow: 1;
+    }
+
+    .project-link {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: #000;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      text-align: center;
+      font-weight: 500;
+      align-self: flex-start;
+    }
+
+    .project-link:hover {
+      background: #333;
+      transform: translateY(-2px);
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem 2rem;
+      background: var(--nav-bg);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-links a {
+      margin-left: 2rem;
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #666;
+    }
+
+    .social-links {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      display: flex;
+      gap: 1rem;
+      z-index: 100;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background: var(--card-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .social-link:hover {
+      transform: translateY(-5px);
+    }
+
+    .visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #dark-mode-toggle {
+      padding: 0.5rem 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-color);
+      cursor: pointer;
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+
+    #dark-mode-toggle:hover {
+      transform: rotate(180deg);
+    }
+
+    
+
+    /* Accessibility Improvements */
+    .project-link:focus,
+    .social-link:focus,
+    .nav-links a:focus {
+      outline: 3px solid #4A90E2;
+      outline-offset: 2px;
+    }
+
+    /* Smooth Scroll */
+    html {
+      scroll-behavior: smooth;
+    }
+    <!-- Add these styles in the existing <style> section -->
+<style>
+  /* ... (keep existing styles) ... */
+
+  /* Updated background image styles */
+  #home {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                url('Assets/4.jpg') no-repeat center center / cover;
+    background-attachment: fixed;
+    position: relative;
+    color: white;
+}
+@media (max-width: 768px) {
+    #home {
+        background-attachment: scroll;
+    }
+}
+
+
+  .profile-container {
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    opacity: 0;
+    transition: all 0.8s ease;
+  }
+
+  .profile-container.visible {
+    opacity: 1;
+  }
+
+  .profile-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 5px solid white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .profile-image:hover {
+    transform: scale(1.05);
+  }
+
+  /* Adjust text positions */
+  #home .text-container {
+    top: 60%;
+  }
+
+  #home .name-text {
+    top: 70%;
+  }
+
+  /* Dark mode adjustments */
+  .dark-mode #home {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('Assets/4.jpg') no-repeat center center;
+    background-size: cover;
+    background-attachment: fixed;
+  }
+
+  .dark-mode .profile-image {
+    border-color: var(--card-bg);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .profile-image {
+      width: 150px;
+      height: 150px;
+    }
+
+    .profile-container {
+      top: 25%;
+    }
+
+    #home .text-container {
+      top: 55%;
+    }
+
+    #home .name-text {
+      top: 65%;
+    }
+  }
+  
+  </style>
+</head>
+<body>
+  <div class="loading" id="loading">
+    <div class="loader"></div>
+  </div>
+
+  <nav class="nav">
+    <div class="logo">@amsayandeep</div>
+    <div class="nav-links">
+      <button id="dark-mode-toggle" aria-label="Toggle dark mode">◐</button>
+      <a href="#home">मुख पेज</a>
+      <a href="#projects">Projects</a>
+    </div>
+  </nav>
+
+  <div class="section" id="home">
+    <div class="profile-container" id="profile">
+      <img src="Assets/3.jpg" alt="Sayandeep's Profile" class="profile-image">
+    </div>
+    <div class="text-container" id="text1">𝑔reetings! i'm</div>
+    <div class="name-text" id="name">sayandeep ghosh</div>
+    <div class="bio-container" id="bio">
+      <div class="bio-text">
+        <h3>   </h3>
+        <h3>learning full stack, video editing &</div></h3>
+        <h3> machine learning. student treading through his 20s :)</h3>
+      </div>
+      <div class="about-section">
+        <h3>💫 About Me:</h3>
+        <h6>🌱 I'm currently learning full stack development & python</h6>
+        <h6>💬 Ask me about mathematics</h6>
+        <h6>📫 How to reach me: <a href="mailto:sayandeep.dev@gmail.com" class="contact-email">sayandeep.dev@gmail.com</a> [OR] Socials (Right Bottom->)</h6>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="projects">
+    <div class="text-container" id="text2"></div>
+    <h1>मेरे प्रोजेक्ट</h1>
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-image" style="background-image: url('Assets/1.png');" aria-label="Project 1 image"></div>
+        <div class="project-content">
+          <h3 class="project-title">Predictive Analytics for Price Stabilization of Essential Commodities</h3>
+          <p class="project-description">Predictive Analytics for Price Stabilization of Essential Commodities is an AI/ML-driven platform that forecasts price fluctuations in essential food items like pulses and onions. Using models like ARIMA and LSTM, it analyzes historical data, seasonal trends, and market disruptions to provide actionable insights for stabilizing prices and ensuring food security.</p>
+          <a href="https://github.com/amsayandeep/Predictive-Analytics-for-Price-Stabilization-of-Essential-Commodities" class="project-link" target="_blank" rel="noopener noreferrer">View Project</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-image" style="background-image: url('Assets/2.png');" aria-label="Project 2 image"></div>
+        <div class="project-content">
+          <h3 class="project-title">Youtube Video Summarizer</h3>
+          <p class="project-description">YouTube Video Summarizer is an AI-powered tool that extracts transcripts from YouTube videos and condenses them into concise summaries. It supports multiple languages, leverages the Gemini API for intelligent summarization, and allows users to save summaries locally. Built with Python and the YouTube Transcript API, it enhances learning efficiency.</p>
+          <a href="https://github.com/amsayandeep/Youtube_Video_Summarizer" class="project-link" target="_blank" rel="noopener noreferrer">View Project</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="social-links">
+    <a href="https://github.com/amsayandeep" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile">
+      <img src="Assets/g.png" alt="GitHub" style="width: 40px; height: 40px;">
+    </a>
+    <a href="https://linkedin.com/in/ghoshsayandeep" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
+      <img src="Assets/l.png" alt="LinkedIn" style="width: 40px; height: 40px;">
+    </a>
+    <a href="https://x.com/Sayandeep_X" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Twitter Profile">
+      <img src="Assets/x.png" alt="Twitter" style="width: 40px; height: 40px;">
+    </a>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+  // Remove loading screen
+  const loader = document.getElementById('loading');
+  loader.style.opacity = '0';
+  setTimeout(() => loader.remove(), 500);
+
+  // Get DOM elements
+  const textElements = document.querySelectorAll('.text-container');
+  const nameText = document.querySelector('.name-text');
+  const projectGrids = document.querySelectorAll('.project-grid');
+  const profileContainer = document.querySelector('.profile-container');
+
+  // Scroll animation handler
+  const checkScroll = () => {
+    const triggerBottom = window.innerHeight * 0.8;
+    
+    // Handle profile visibility
+    if (window.scrollY < window.innerHeight) {
+      profileContainer.classList.add('visible');
+    } else {
+      profileContainer.classList.remove('visible');
+    }
+    
+    // Handle text animations
+    textElements.forEach(text => {
+      const parentSection = text.parentElement;
+      const sectionTop = parentSection.getBoundingClientRect().top;
+      const sectionBottom = parentSection.getBoundingClientRect().bottom;
+      
+      if (sectionTop < triggerBottom && sectionBottom > 0) {
+        text.classList.add('visible');
+        if (text.id === 'text1') {
+          nameText.classList.add('visible');
+        }
+        
+        // Enhanced parallax effect
+        const scrollPercent = (triggerBottom - sectionTop) / triggerBottom;
+        const yOffset = Math.min(scrollPercent * 50, 50);
+        const scale = 1 + scrollPercent * 0.2;
+        const rotation = scrollPercent * 5;
+        
+        text.style.transform = `translate(-50%, ${-50 + yOffset}%) scale(${scale}) rotate(${rotation}deg)`;
+        
+        if (text.id === 'text1') {
+          nameText.style.transform = `translate(-50%, ${-50 + yOffset + 80}%) scale(${scale})`;
+        }
+      } else {
+        text.classList.remove('visible');
+        if (text.id === 'text1') {
+          nameText.classList.remove('visible');
+        }
+      }
+    });
+
+    // Handle project grid animations
+    projectGrids.forEach(grid => {
+      const gridTop = grid.getBoundingClientRect().top;
+      
+      if (gridTop < triggerBottom) {
+        grid.classList.add('visible');
+      } else {
+        grid.classList.remove('visible');
+      }
+    });
+  };
+
+  // Debounced scroll handler
+  let scrollTimeout;
+  const scrollHandler = () => {
+    if (scrollTimeout) {
+      window.cancelAnimationFrame(scrollTimeout);
+    }
+    scrollTimeout = window.requestAnimationFrame(checkScroll);
+  };
+
+  // Initialize Intersection Observer
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      } else {
+        if (!entry.target.classList.contains('project-grid')) {
+          entry.target.classList.remove('visible');
+        }
+      }
+    });
+  }, observerOptions);
+
+  // Observe elements
+  document.querySelectorAll('.project-grid, .text-container, .profile-container').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Dark mode handler
+  const toggleButton = document.getElementById('dark-mode-toggle');
+  const setTheme = (theme) => {
+    document.body.classList.toggle('dark-mode', theme === 'dark');
+    localStorage.setItem('theme', theme);
+    toggleButton.textContent = theme === 'dark' ? '◐' : '◑';
+    toggleButton.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`);
+  };
+
+  toggleButton.addEventListener('click', () => {
+    const currentTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
+    setTheme(currentTheme);
+  });
+
+  // Initialize theme
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  setTheme(savedTheme);
+
+  // Smooth scroll navigation
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+
+  // Resize handler
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    if (resizeTimeout) {
+      clearTimeout(resizeTimeout);
+    }
+    resizeTimeout = setTimeout(() => {
+      checkScroll();
+    }, 250);
+  }, { passive: true });
+
+  // Image error handling
+  document.querySelectorAll('img').forEach(img => {
+    img.addEventListener('error', function() {
+      console.error(`Failed to load image: ${this.src}`);
+      this.src = 'Assets/placeholder.png';
+      this.alt = 'Image not available';
+    });
+  });
+
+  // Add scroll event listener
+  window.addEventListener('scroll', scrollHandler, { passive: true });
+  
+  // Initial check
+  checkScroll();
+
+  // Performance optimization for smooth scroll
+  document.documentElement.style.setProperty('--scroll-behavior', 'auto');
+  setTimeout(() => {
+    document.documentElement.style.setProperty('--scroll-behavior', 'smooth');
+  }, 1000);
+});
+  </script>
+</body>
+</html>
